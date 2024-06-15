@@ -1,31 +1,42 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { DragHandlers, motion } from "framer-motion";
 
 const stepWidth = 40;
 
-const getLeft = (step: number) => stepWidth * (step - 1) - 16;
+const getStepperLeftPosition = (index: number) => stepWidth * index - 16;
 
-const StepSlider = () => {
-  const [step, setStep] = useState(2);
-  const steps = [1, 2, 3, 4, 5, 6, 7];
+type Props = {
+  steps: number[];
+  stepIndex: number;
+  incrementStep: () => void;
+  decrementStep: () => void;
+};
 
-  console.log("step", step);
-
+const StepSlider = ({
+  steps,
+  stepIndex,
+  incrementStep,
+  decrementStep,
+}: Props) => {
   const handleDragEnd: DragHandlers["onDrag"] = (event, info) => {
     const { offset } = info;
 
     if (offset.x > 0) {
-      setStep((prev) => Math.min(prev + 1, 7));
+      incrementStep();
     } else if (offset.x < 0) {
-      setStep((prev) => Math.max(1, prev - 1));
+      decrementStep();
     }
   };
 
   return (
     <div className="w-full flex items-center justify-center">
-      <div className="relative w-[240px] h-2 bg-gray-300 flex items-center">
+      <div
+        className={`relative w-[${
+          (steps.length - 1) * stepWidth
+        }px] h-2 bg-gray-300 flex items-center`}
+      >
         <div className="absolute w-[2px] h-4 left-0 bottom-0 bg-black" />
         <span className="absolute bottom-5 -left-1">{steps[0]}</span>
 
@@ -33,7 +44,7 @@ const StepSlider = () => {
           <div
             key={index}
             className={`absolute w-[1.5px] h-1 bg-black`}
-            style={{ left: `${(index + 1) * 40}px` }}
+            style={{ left: `${(index + 1) * stepWidth}px` }}
           />
         ))}
 
@@ -48,9 +59,9 @@ const StepSlider = () => {
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           dragElastic={0.5}
-          style={{ left: `${getLeft(step)}px` }}
+          style={{ left: `${getStepperLeftPosition(stepIndex)}px` }}
         >
-          <span className="text-white">{step}</span>
+          <span className="text-white">{steps[stepIndex]}</span>
         </motion.div>
       </div>
     </div>
