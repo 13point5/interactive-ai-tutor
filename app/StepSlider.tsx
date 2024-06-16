@@ -36,7 +36,7 @@ const StepSlider = ({
 
   return (
     <div className="flex">
-      <span className="font-serif text-xl mr-[20px] mt-[-15px]">{label}</span>
+      <span className="font-serif text-xl mr-[30px] mt-[-15px]">{label}</span>
 
       <div
         className={`relative h-2 bg-slate-300 flex items-center`}
@@ -45,7 +45,7 @@ const StepSlider = ({
         }}
       >
         <div className="absolute w-[2px] h-4 left-0 bottom-0 bg-black" />
-        <span className="absolute bottom-5 -left-1">{steps[0]}</span>
+        <span className="absolute bottom-5 -left-1 font-serif">{steps[0]}</span>
 
         {steps.slice(1, steps.length - 1).map((_, index) => (
           <div
@@ -56,7 +56,7 @@ const StepSlider = ({
         ))}
 
         <div className="absolute w-[2px] h-4 right-0 bottom-0 bg-black" />
-        <span className="absolute bottom-5 -right-1">
+        <span className="absolute bottom-5 -right-1 font-serif">
           {steps[steps.length - 1]}
         </span>
 

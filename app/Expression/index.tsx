@@ -26,12 +26,14 @@ type Props = {
   symbolData: SymbolData;
   expression: ExpressionSymbols;
   expressionLabel: string;
+  fullWidth?: boolean;
 };
 
 export const Expression = ({
   symbolData,
   expression,
   expressionLabel,
+  fullWidth = false,
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 items-start">
@@ -53,7 +55,9 @@ export const Expression = ({
       <div
         className="flex bg-slate-300"
         style={{
-          width: `${getExpressionMaxWidth(expression, symbolData)}px`,
+          width: fullWidth
+            ? "100%"
+            : `${getExpressionMaxWidth(expression, symbolData)}px`,
         }}
       >
         {expression.map((symbol, index) => {

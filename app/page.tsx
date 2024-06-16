@@ -8,12 +8,39 @@ import { useEffect, useRef, useState } from "react";
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type StepType = "increment" | "decrement";
+type SimulationItem = {
+  variable: "x" | "y";
+  stepType: StepType;
+};
+
+const steps = [1, 2, 3, 4, 5, 6, 7];
 
 export default function Home() {
-  const [stepIndex, setStepIndex] = useState(2);
-  const steps = [1, 2, 3, 4, 5, 6, 7];
+  const [yStepIndex, setYStepIndex] = useState(0);
+  const [xStepIndex, setXStepIndex] = useState(0);
 
-  const simulation: StepType[] = ["increment", "increment", "decrement"];
+  const simulation: SimulationItem[] = [
+    {
+      variable: "x",
+      stepType: "increment",
+    },
+    {
+      variable: "x",
+      stepType: "increment",
+    },
+    {
+      variable: "y",
+      stepType: "increment",
+    },
+    {
+      variable: "x",
+      stepType: "increment",
+    },
+    {
+      variable: "y",
+      stepType: "increment",
+    },
+  ];
   const [simulationIndex, setSimulationIndex] = useState(-1);
 
   const performAction = async () => {
@@ -23,10 +50,10 @@ export default function Home() {
       await delay(500);
 
       const action = simulation[simulationIndex];
-      if (action === "increment") {
-        incrementStep();
-      } else if (action === "decrement") {
-        decrementStep();
+      if (action.stepType === "increment") {
+        incrementStep(action.variable);
+      } else if (action.stepType === "decrement") {
+        decrementStep(action.variable);
       }
     }
   };
@@ -42,14 +69,22 @@ export default function Home() {
     if (simulationIndex >= 0 && simulationIndex < simulation.length - 1) {
       setSimulationIndex((prev) => prev + 1);
     }
-  }, [stepIndex]);
+  }, [yStepIndex, xStepIndex]);
 
-  const incrementStep = () => {
-    setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
+  const incrementStep = (variable: "x" | "y") => {
+    if (variable === "x") {
+      setXStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
+    } else if (variable === "y") {
+      setYStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
+    }
   };
 
-  const decrementStep = () => {
-    setStepIndex((prev) => Math.max(0, prev - 1));
+  const decrementStep = (variable: "x" | "y") => {
+    if (variable === "x") {
+      setXStepIndex((prev) => Math.max(0, prev - 1));
+    } else if (variable === "y") {
+      setYStepIndex((prev) => Math.max(0, prev - 1));
+    }
   };
 
   return (
@@ -62,31 +97,61 @@ export default function Home() {
         Simulate
       </Button>
 
-      <Expression
-        symbolData={{
-          y: {
-            type: "variable",
-            size: steps[stepIndex],
-            maxSize: Math.max(...steps),
-            color: "#955BEB",
-          },
-          5: {
-            type: "constant",
-            size: 6,
-            color: "#7491FF",
-          },
-        }}
-        expression={["y", "y", "5"]}
-        expressionLabel="2y + 5"
-      />
+      <div className="flex flex-col gap-4">
+        <Expression
+          symbolData={{
+            y: {
+              type: "variable",
+              size: steps[yStepIndex],
+              maxSize: Math.max(...steps),
+              color: "#955BEB",
+            },
+            5: {
+              type: "constant",
+              size: 6,
+              color: "#7491FF",
+            },
+          }}
+          expression={["y", "y", "5"]}
+          expressionLabel="2y + 5"
+        />
+
+        <Expression
+          symbolData={{
+            x: {
+              type: "variable",
+              size: steps[xStepIndex],
+              maxSize: Math.max(...steps),
+              color: "#EB9651",
+            },
+            5: {
+              type: "constant",
+              size: 6,
+              color: "#7491FF",
+            },
+          }}
+          expression={["x", "5"]}
+          expressionLabel="x + 5"
+          fullWidth
+        />
+      </div>
 
       <StepSlider
         label="y"
         color="#955BEB"
         steps={steps}
-        stepIndex={stepIndex}
-        incrementStep={incrementStep}
-        decrementStep={decrementStep}
+        stepIndex={yStepIndex}
+        incrementStep={() => incrementStep("y")}
+        decrementStep={() => decrementStep("y")}
+      />
+
+      <StepSlider
+        label="x"
+        color="#EB9651"
+        steps={steps}
+        stepIndex={xStepIndex}
+        incrementStep={() => incrementStep("x")}
+        decrementStep={() => decrementStep("y")}
       />
     </main>
   );
