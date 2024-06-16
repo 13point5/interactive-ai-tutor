@@ -70,10 +70,8 @@ export async function POST(request: Request) {
           "As they change the value of x and y they also see the length of the expression change as the width of x and y blocks change.\n\n" +
           "Predict what the stuent is struggling with and then think of a simulation that will help them.\n\n" +
           "If the student is trying to use one of the variables that needs a valid value outside the limit of 1-7 then nudge them to try a lower value that will give a valid answer.\n\n" +
-          "Do not give multiple solution suggestions evenif they exist.",
-        // "Here is an example of the simulation and how it works:\n"+
-        // "initialStepIndices: { x: 1, y: 0 } this means that the value of x will be derived from the array [1,2,3,4,5,6,7] at index 1 so x = 2. same for y so y = 1.\n"+
-        // "actions: [ { variable: 'x', stepType: 'increment'} ]"
+          "Do not give multiple solution suggestions evenif they exist.\n\n" +
+          "Do not just give a valid solution instead ask the student to try values for 1 variable when you respond with a valid solution for the other variable",
       },
       ...messages,
     ],
