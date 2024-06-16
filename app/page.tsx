@@ -33,6 +33,7 @@ export default function Home() {
           },
         }}
         expression={["y", "y", "5"]}
+        expressionLabel="2y + 5"
       />
 
       <StepSlider
