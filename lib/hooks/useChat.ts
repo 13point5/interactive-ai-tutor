@@ -1,4 +1,5 @@
 import { Message } from "@/app/chatbot/chat-message";
+import { steps } from "@/app/page";
 import { useState } from "react";
 
 export const useChat = () => {
@@ -9,9 +10,14 @@ export const useChat = () => {
   const handleSubmit = async ({
     query,
     image,
+    variables,
   }: {
     query: string;
     image: string;
+    variables: {
+      xStepIndex: number;
+      yStepIndex: number;
+    };
   }) => {
     setIsLoading(true);
 
@@ -28,13 +34,18 @@ export const useChat = () => {
     const result = await fetch("/api/chat", {
       method: "POST",
       body: JSON.stringify({
+        variables,
         messages: [
           {
             role: "user",
             content: [
               {
                 type: "text",
-                text: query,
+                text: `User's attempts: xStepIndex = ${
+                  variables.xStepIndex
+                }, x = ${steps[variables.xStepIndex]}, yStepIndex = ${
+                  variables.yStepIndex
+                }, y = ${steps[variables.yStepIndex]}.\nUser's query: ${query}`,
               },
               {
                 type: "image_url",

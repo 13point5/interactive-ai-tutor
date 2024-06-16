@@ -20,7 +20,7 @@ export type Simulation = {
   actions: SimulationAction[];
 };
 
-const steps = [1, 2, 3, 4, 5, 6, 7];
+export const steps = [1, 2, 3, 4, 5, 6, 7];
 
 const sampleSimulation: Simulation = {
   initialStepIndices: {
@@ -77,6 +77,7 @@ export default function Home() {
 
   const { start: handleStartSimulation } = useSimulation({
     simulation,
+    resetSimulation: () => setSimulation(null),
     xStepIndex,
     setXStepIndex,
     yStepIndex,
@@ -84,6 +85,8 @@ export default function Home() {
     incrementStep,
     decrementStep,
   });
+
+  console.log("simulation", simulation);
 
   useEffect(() => {
     handleStartSimulation();
@@ -99,88 +102,111 @@ export default function Home() {
 
     const canvas = await html2canvas(questionAreaRef.current);
     const base64Image = canvas.toDataURL("image/png");
-    console.log(base64Image); // This is your Base64-encoded image
 
-    await handleSubmit({ query, image: base64Image });
+    await handleSubmit({
+      query,
+      image: base64Image,
+      variables: { xStepIndex, yStepIndex },
+    });
   };
 
   return (
-    <main className="min-h-screen flex justify-center gap-24 p-4">
-      <div ref={questionAreaRef} className="flex flex-col gap-14 items-center">
-        {/* <Button onClick={handleStartSimulation}>Simulate</Button> */}
-
-        <div className="flex flex-col items-center gap-4">
-          <p>
-            Find a value for <span className="font-serif">x</span> and for{" "}
-            <span className="font-serif">y</span> that makes{" "}
-            <span className="font-serif">2y + 5 = x + 5 true.</span>
-          </p>
-
-          <div className="flex flex-col gap-4">
-            <Expression
-              symbolData={{
-                y: {
-                  type: "variable",
-                  size: steps[yStepIndex],
-                  maxSize: Math.max(...steps),
-                  color: "#955BEB",
-                },
-                5: {
-                  type: "constant",
-                  size: 6,
-                  color: "#7491FF",
-                },
-              }}
-              expression={["y", "y", "5"]}
-              expressionLabel="2y + 5"
-            />
-
-            <Expression
-              symbolData={{
-                x: {
-                  type: "variable",
-                  size: steps[xStepIndex],
-                  maxSize: Math.max(...steps),
-                  color: "#EB9651",
-                },
-                5: {
-                  type: "constant",
-                  size: 6,
-                  color: "#7491FF",
-                },
-              }}
-              expression={["x", "5"]}
-              expressionLabel="x + 5"
-              fullWidth
-            />
-          </div>
-        </div>
-
-        <StepSlider
-          label="y"
-          color="#955BEB"
-          steps={steps}
-          stepIndex={yStepIndex}
-          incrementStep={() => incrementStep("y")}
-          decrementStep={() => decrementStep("y")}
-        />
-
-        <StepSlider
-          label="x"
-          color="#EB9651"
-          steps={steps}
-          stepIndex={xStepIndex}
-          incrementStep={() => incrementStep("x")}
-          decrementStep={() => decrementStep("x")}
-        />
+    <main className="min-h-screen flex flex-col gap-4 p-8">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight text-center">
+          Ambient AI Tutor
+        </h1>
+        <p className="text-sm text-center">
+          AI tutor that not just responds in text but{" "}
+          <i>
+            <b>interacts</b>
+          </i>{" "}
+          with students by{" "}
+          <i>
+            <b>controlling</b>
+          </i>{" "}
+          the interactive activity.
+        </p>
       </div>
 
-      <Chatbot
-        messages={messages}
-        isLoading={isLoading}
-        onSubmit={handleQuerySubmit}
-        setSimulation={setSimulation}
-      />
+      <div className="flex justify-center gap-10">
+        <div
+          ref={questionAreaRef}
+          className="flex flex-col gap-14 items-center justify-center border rounded-md h-[500px] p-4"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <p>
+              Find a value for <span className="font-serif">x</span> and for{" "}
+              <span className="font-serif">y</span> that makes{" "}
+              <span className="font-serif">2y + 5 = x + 5 true.</span>
+            </p>
+
+            <div className="flex flex-col gap-4 ml-6">
+              <Expression
+                symbolData={{
+                  y: {
+                    type: "variable",
+                    size: steps[yStepIndex],
+                    maxSize: Math.max(...steps),
+                    color: "#955BEB",
+                  },
+                  5: {
+                    type: "constant",
+                    size: 6,
+                    color: "#7491FF",
+                  },
+                }}
+                expression={["y", "y", "5"]}
+                expressionLabel="2y + 5"
+              />
+
+              <Expression
+                symbolData={{
+                  x: {
+                    type: "variable",
+                    size: steps[xStepIndex],
+                    maxSize: Math.max(...steps),
+                    color: "#EB9651",
+                  },
+                  5: {
+                    type: "constant",
+                    size: 6,
+                    color: "#7491FF",
+                  },
+                }}
+                expression={["x", "5"]}
+                expressionLabel="x + 5"
+                fullWidth
+              />
+            </div>
+          </div>
+
+          <StepSlider
+            label="y"
+            color="#955BEB"
+            steps={steps}
+            stepIndex={yStepIndex}
+            incrementStep={() => incrementStep("y")}
+            decrementStep={() => decrementStep("y")}
+          />
+
+          <StepSlider
+            label="x"
+            color="#EB9651"
+            steps={steps}
+            stepIndex={xStepIndex}
+            incrementStep={() => incrementStep("x")}
+            decrementStep={() => decrementStep("x")}
+          />
+        </div>
+
+        <Chatbot
+          messages={messages}
+          isLoading={isLoading}
+          onSubmit={handleQuerySubmit}
+          setSimulation={setSimulation}
+        />
+      </div>
     </main>
   );
 }

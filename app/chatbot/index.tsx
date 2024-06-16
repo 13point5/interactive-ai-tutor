@@ -6,22 +6,6 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2Icon, SendIcon } from "lucide-react";
 import { useState } from "react";
 
-// const messages = [
-//   {
-//     role: "human",
-//     content: "sup",
-//   },
-//   {
-//     role: "assistant",
-//     content: "hi",
-//   },
-// ];
-
-// const messages = Array.from({ length: 30 }).map((_, index) => ({
-//   role: index % 2 === 0 ? "user" : "assistant",
-//   content: "sup",
-// }));
-
 type Props = {
   messages: Message[];
   isLoading: boolean;
@@ -51,8 +35,8 @@ export const Chatbot = ({
   };
 
   return (
-    <div className="w-[500px] h-fit p-4">
-      <div className="flex flex-1 flex-col gap-2 overflow-hidden w-[500px] h-[700px] p-4">
+    <div className="w-[500px] h-[500px]">
+      <div className="flex flex-1 flex-col gap-2 overflow-hidden h-full p-4 border rounded-md">
         {
           <div className="overflow-auto w-full h-full max-h-full flex-1">
             {messages.map(

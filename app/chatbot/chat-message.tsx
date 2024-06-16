@@ -29,7 +29,7 @@ export const ChatMessage = ({ message, setSimulation }: Props) => {
     <div className="group relative mb-4 flex items-start">
       <div
         className={cn(
-          "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border",
+          "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md",
           isUser ? "bg-background" : "bg-primary text-primary-foreground",
           isUser && "border-[#10172A]"
         )}

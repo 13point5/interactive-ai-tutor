@@ -5,6 +5,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const useSimulation = ({
   simulation,
+  resetSimulation,
   xStepIndex,
   setXStepIndex,
   yStepIndex,
@@ -13,6 +14,7 @@ export const useSimulation = ({
   decrementStep,
 }: {
   simulation: Simulation | null;
+  resetSimulation: () => void;
   xStepIndex: number;
   setXStepIndex: (value: number) => void;
   yStepIndex: number;
@@ -23,6 +25,7 @@ export const useSimulation = ({
   const [simulationIndex, setSimulationIndex] = useState(-1);
 
   const handleStartSimulation = () => {
+    console.log("simulation", simulation);
     if (!simulation) return;
 
     setXStepIndex(simulation.initialStepIndices.x);
@@ -45,6 +48,10 @@ export const useSimulation = ({
       } else if (action.stepType === "decrement") {
         decrementStep(action.variable);
       }
+    }
+
+    if (simulationIndex === simulation.actions.length - 1) {
+      resetSimulation();
     }
   };
 
