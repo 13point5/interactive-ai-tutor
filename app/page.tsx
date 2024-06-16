@@ -3,14 +3,19 @@
 import { Expression } from "@/app/Expression";
 import StepSlider from "@/app/StepSlider";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type StepType = "increment" | "decrement";
-type SimulationItem = {
-  variable: "x" | "y";
+type Variable = "x" | "y";
+type SimulationAction = {
+  variable: Variable;
   stepType: StepType;
+};
+type Simulation = {
+  initialStepIndices: Record<Variable, number>;
+  actions: SimulationAction[];
 };
 
 const steps = [1, 2, 3, 4, 5, 6, 7];
@@ -19,37 +24,50 @@ export default function Home() {
   const [yStepIndex, setYStepIndex] = useState(0);
   const [xStepIndex, setXStepIndex] = useState(0);
 
-  const simulation: SimulationItem[] = [
-    {
-      variable: "x",
-      stepType: "increment",
+  const simulation: Simulation = {
+    initialStepIndices: {
+      x: 2,
+      y: 1,
     },
-    {
-      variable: "x",
-      stepType: "increment",
-    },
-    {
-      variable: "y",
-      stepType: "increment",
-    },
-    {
-      variable: "x",
-      stepType: "increment",
-    },
-    {
-      variable: "y",
-      stepType: "increment",
-    },
-  ];
+    actions: [
+      {
+        variable: "x",
+        stepType: "increment",
+      },
+      {
+        variable: "x",
+        stepType: "increment",
+      },
+      {
+        variable: "y",
+        stepType: "increment",
+      },
+      {
+        variable: "x",
+        stepType: "increment",
+      },
+      {
+        variable: "y",
+        stepType: "increment",
+      },
+    ],
+  };
   const [simulationIndex, setSimulationIndex] = useState(-1);
+
+  const handleStartSimulation = () => {
+    setXStepIndex(simulation.initialStepIndices.x);
+    setYStepIndex(simulation.initialStepIndices.y);
+
+    setSimulationIndex(0);
+  };
 
   const performAction = async () => {
     if (simulationIndex === -1) return;
 
-    if (simulationIndex < simulation.length) {
+    if (simulationIndex < simulation.actions.length) {
       await delay(500);
 
-      const action = simulation[simulationIndex];
+      const action = simulation.actions[simulationIndex];
       if (action.stepType === "increment") {
         incrementStep(action.variable);
       } else if (action.stepType === "decrement") {
@@ -66,7 +84,10 @@ export default function Home() {
 
   useEffect(() => {
     // This useEffect checks if there's more to simulate after each stepIndex update
-    if (simulationIndex >= 0 && simulationIndex < simulation.length - 1) {
+    if (
+      simulationIndex >= 0 &&
+      simulationIndex < simulation.actions.length - 1
+    ) {
       setSimulationIndex((prev) => prev + 1);
     }
   }, [yStepIndex, xStepIndex]);
@@ -89,13 +110,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col gap-14 items-center p-24">
-      <Button
-        onClick={() => {
-          setSimulationIndex(0);
-        }}
-      >
-        Simulate
-      </Button>
+      <Button onClick={handleStartSimulation}>Simulate</Button>
 
       <div className="flex flex-col gap-4">
         <Expression
