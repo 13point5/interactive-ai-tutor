@@ -13,7 +13,7 @@ export default function Home() {
   const [stepIndex, setStepIndex] = useState(2);
   const steps = [1, 2, 3, 4, 5, 6, 7];
 
-  const simulation: StepType[] = ["increment", "increment"];
+  const simulation: StepType[] = ["increment", "increment", "decrement"];
   const [simulationIndex, setSimulationIndex] = useState(-1);
 
   const performAction = async () => {
@@ -81,6 +81,7 @@ export default function Home() {
       />
 
       <StepSlider
+        label="y"
         color="#955BEB"
         steps={steps}
         stepIndex={stepIndex}

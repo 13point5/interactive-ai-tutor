@@ -8,6 +8,7 @@ const stepWidth = 50;
 const getStepperLeftPosition = (index: number) => stepWidth * index - 16;
 
 type Props = {
+  label: string;
   color: string;
   steps: number[];
   stepIndex: number;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const StepSlider = ({
+  label,
   color,
   steps,
   stepIndex,
@@ -33,7 +35,9 @@ const StepSlider = ({
   };
 
   return (
-    <div className="w-full flex items-center justify-center">
+    <div className="flex">
+      <span className="font-serif text-xl mr-[20px] mt-[-15px]">{label}</span>
+
       <div
         className={`relative h-2 bg-slate-300 flex items-center`}
         style={{
