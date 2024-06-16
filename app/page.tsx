@@ -18,7 +18,19 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col gap-14 items-center p-24">
-      <Expression size={steps[stepIndex]} />
+      <Expression
+        symbolData={{
+          y: {
+            size: steps[stepIndex],
+            color: "#955BEB",
+          },
+          5: {
+            size: 6,
+            color: "#7491FF",
+          },
+        }}
+        expression={["y", "y", "5"]}
+      />
 
       <StepSlider
         steps={steps}
