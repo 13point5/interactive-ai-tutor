@@ -1,51 +1,11 @@
 import { ExpressionBlock } from "@/app/Expression/block";
+import {
+  getBlockStyle,
+  getExpressionMaxWidth,
+  getExpressionWidth,
+} from "@/app/Expression/utils";
 
-const BLOCK_DEFAULT_WIDTH = 15;
-
-const getBlockWidth = (size: number) => size * BLOCK_DEFAULT_WIDTH;
-
-const getBlockStyle = (size: number, color: string) => ({
-  width: `${getBlockWidth(size)}px`,
-  backgroundColor: color,
-});
-
-const getExpressionMaxWidth = (
-  expressionSymbols: ExpressionSymbols,
-  symbolData: SymbolData
-) => {
-  let maxWidth = 0;
-
-  expressionSymbols.forEach((symbol) => {
-    const data = symbolData[symbol];
-    if (!data) return;
-
-    if (data.type === "variable") {
-      maxWidth += getBlockWidth(data.maxSize);
-    } else {
-      maxWidth += getBlockWidth(data.size);
-    }
-  });
-
-  return maxWidth;
-};
-
-const getExpressionWidth = (
-  expressionSymbols: ExpressionSymbols,
-  symbolData: SymbolData
-) => {
-  let width = 0;
-
-  expressionSymbols.forEach((symbol) => {
-    const data = symbolData[symbol];
-    if (!data) return;
-
-    width += getBlockWidth(data.size);
-  });
-
-  return width;
-};
-
-type SymbolData = Record<
+export type SymbolData = Record<
   string,
   | {
       type: "variable";
@@ -60,7 +20,7 @@ type SymbolData = Record<
     }
 >;
 
-type ExpressionSymbols = string[];
+export type ExpressionSymbols = string[];
 
 type Props = {
   symbolData: SymbolData;
