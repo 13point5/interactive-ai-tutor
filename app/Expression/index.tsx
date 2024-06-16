@@ -9,20 +9,56 @@ const getBlockStyle = (size: number, color: string) => ({
   backgroundColor: color,
 });
 
-type Props = {
-  symbolData: Record<
-    string,
-    {
+const getExpressionMaxWidth = (
+  expressionSymbols: ExpressionSymbols,
+  symbolData: SymbolData
+) => {
+  let maxWidth = 0;
+
+  expressionSymbols.forEach((symbol) => {
+    const data = symbolData[symbol];
+    if (!data) return;
+
+    if (data.type === "variable") {
+      maxWidth += getBlockWidth(data.maxSize);
+    } else {
+      maxWidth += getBlockWidth(data.size);
+    }
+  });
+
+  return maxWidth;
+};
+
+type SymbolData = Record<
+  string,
+  | {
+      type: "variable";
+      size: number;
+      maxSize: number;
+      color: string;
+    }
+  | {
+      type: "constant";
       size: number;
       color: string;
     }
-  >;
-  expression: string[];
+>;
+
+type ExpressionSymbols = string[];
+
+type Props = {
+  symbolData: SymbolData;
+  expression: ExpressionSymbols;
 };
 
 export const Expression = ({ symbolData, expression }: Props) => {
   return (
-    <div className="flex">
+    <div
+      className="flex bg-slate-300"
+      style={{
+        width: `${getExpressionMaxWidth(expression, symbolData)}px`,
+      }}
+    >
       {expression.map((symbol, index) => {
         const data = symbolData[symbol];
 

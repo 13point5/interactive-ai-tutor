@@ -21,10 +21,13 @@ export default function Home() {
       <Expression
         symbolData={{
           y: {
+            type: "variable",
             size: steps[stepIndex],
+            maxSize: Math.max(...steps),
             color: "#955BEB",
           },
           5: {
+            type: "constant",
             size: 6,
             color: "#7491FF",
           },
@@ -33,6 +36,7 @@ export default function Home() {
       />
 
       <StepSlider
+        color="#955BEB"
         steps={steps}
         stepIndex={stepIndex}
         incrementStep={incrementStep}

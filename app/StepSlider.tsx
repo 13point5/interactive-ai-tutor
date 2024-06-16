@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { DragHandlers, motion } from "framer-motion";
 
-const stepWidth = 40;
+const stepWidth = 50;
 
 const getStepperLeftPosition = (index: number) => stepWidth * index - 16;
 
 type Props = {
+  color: string;
   steps: number[];
   stepIndex: number;
   incrementStep: () => void;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const StepSlider = ({
+  color,
   steps,
   stepIndex,
   incrementStep,
@@ -60,7 +62,10 @@ const StepSlider = ({
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           dragElastic={0.5}
-          style={{ left: `${getStepperLeftPosition(stepIndex)}px` }}
+          style={{
+            left: `${getStepperLeftPosition(stepIndex)}px`,
+            backgroundColor: color,
+          }}
         >
           <span className="text-white">{steps[stepIndex]}</span>
         </motion.div>
