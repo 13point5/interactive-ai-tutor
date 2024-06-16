@@ -33,9 +33,10 @@ const StepSlider = ({
   return (
     <div className="w-full flex items-center justify-center">
       <div
-        className={`relative w-[${
-          (steps.length - 1) * stepWidth
-        }px] h-2 bg-gray-300 flex items-center`}
+        className={`relative h-2 bg-slate-300 flex items-center`}
+        style={{
+          width: `${(steps.length - 1) * stepWidth}px`,
+        }}
       >
         <div className="absolute w-[2px] h-4 left-0 bottom-0 bg-black" />
         <span className="absolute bottom-5 -left-1">{steps[0]}</span>

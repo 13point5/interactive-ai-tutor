@@ -1,5 +1,6 @@
 "use client";
 
+import { Expression } from "@/app/Expression";
 import StepSlider from "@/app/StepSlider";
 import { useState } from "react";
 
@@ -16,7 +17,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col gap-14 items-center p-24">
+      <Expression size={steps[stepIndex]} />
+
       <StepSlider
         steps={steps}
         stepIndex={stepIndex}
