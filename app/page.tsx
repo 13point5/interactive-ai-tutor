@@ -2,11 +2,47 @@
 
 import { Expression } from "@/app/Expression";
 import StepSlider from "@/app/StepSlider";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+type StepType = "increment" | "decrement";
 
 export default function Home() {
   const [stepIndex, setStepIndex] = useState(2);
   const steps = [1, 2, 3, 4, 5, 6, 7];
+
+  const simulation: StepType[] = ["increment", "increment"];
+  const [simulationIndex, setSimulationIndex] = useState(-1);
+
+  const performAction = async () => {
+    if (simulationIndex === -1) return;
+
+    if (simulationIndex < simulation.length) {
+      await delay(500);
+
+      const action = simulation[simulationIndex];
+      if (action === "increment") {
+        incrementStep();
+      } else if (action === "decrement") {
+        decrementStep();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (simulationIndex >= 0) {
+      performAction();
+    }
+  }, [simulationIndex]);
+
+  useEffect(() => {
+    // This useEffect checks if there's more to simulate after each stepIndex update
+    if (simulationIndex >= 0 && simulationIndex < simulation.length - 1) {
+      setSimulationIndex((prev) => prev + 1);
+    }
+  }, [stepIndex]);
 
   const incrementStep = () => {
     setStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
@@ -18,6 +54,14 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col gap-14 items-center p-24">
+      <Button
+        onClick={() => {
+          setSimulationIndex(0);
+        }}
+      >
+        Simulate
+      </Button>
+
       <Expression
         symbolData={{
           y: {
